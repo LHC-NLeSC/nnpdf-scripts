@@ -3,7 +3,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=32
 #SBATCH --partition thin
-#SBATCH --time 02:30:00
+#SBATCH --time 02:00:00
 #SBATCH --output=logs/output_%A_%a.out
 
 
