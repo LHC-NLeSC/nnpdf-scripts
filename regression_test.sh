@@ -24,9 +24,11 @@ echo "Evolving all replicas from runcard ${RUNCARD2}..."
 evolven3fit $RUNCARD2 $REPLICAS
 
 echo "Running postfit for runcard ${RUNCARD1}..."
-postfit $RUNCARD1 $REPLICAS
+# Note: the replicas we give here are by default the number that pass the checks we're about to do
+# Below we ask for at least one.
+postfit 1 $RUNCARD1 --at-least-nrep
 echo "Running postfit for runcard ${RUNCARD2}..."
-postfit $RUNCARD2 $REPLICAS
+postfit 1 $RUNCARD2 --at-least-nrep
 
 echo "Comparing fits and uploading..."
 vp-comparefits $RUNCARD1 $RUNCARD2 --upload
