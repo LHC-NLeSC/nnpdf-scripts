@@ -25,7 +25,7 @@ mamba install --yes swig pkg-config make
 
 echo "Building nnpdf..."
 cd $BUILD_PATH
-build_dir = "build_$ENV"  # putting the env name in the builddir makes it easy to experiment
+build_dir="build_$ENV"  # putting the env name in the builddir makes it easy to experiment
 rm -rf $build_dir
 mkdir $build_dir
 cd $build_dir
