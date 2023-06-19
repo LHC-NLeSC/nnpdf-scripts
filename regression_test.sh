@@ -30,5 +30,9 @@ postfit 1 $RUNCARD1 --at-least-nrep
 echo "Running postfit for runcard ${RUNCARD2}..."
 postfit 1 $RUNCARD2 --at-least-nrep
 
+# setupfit, it's ok to run this after
+vp-setupfit "${RUNCARD1}.yml"
+vp-setupfit "${RUNCARD2}.yml"
+
 echo "Comparing fits and uploading..."
 vp-comparefits $RUNCARD1 $RUNCARD2 --upload
