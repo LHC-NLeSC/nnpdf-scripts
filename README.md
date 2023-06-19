@@ -29,5 +29,8 @@ Now to run a job specified on a particular `runcard`, using both branches,
 ./submit_from_branch.sh master runcard 100
 ./submit_from_branch.sh mybranch runcard 100
 ```
+If the environment or runcard is new, make sure to first run one replica separatelyx
+Otherwise when running multiple in parallel, they will all see that some files are missing
+and try to download it, and you may get errors.
 
 After this it's still necessary to do a postfit.
