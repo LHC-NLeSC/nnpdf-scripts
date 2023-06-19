@@ -9,7 +9,7 @@
 [[ $# -ne 2 ]] && { echo "Usage: $0 envname path_to_repo"; exit 1; }
 
 ENV=$1
-PATH=$2
+BUILD_PATH=$2
 
 echo "Creating and activating new environment $ENV..."
 source ~/.bashrc
@@ -24,7 +24,7 @@ echo "Installing swig, pkg-config, make"
 mamba install --yes swig pkg-config make
 
 echo "Building nnpdf..."
-cd $PATH
+cd $BUILD_PATH
 build_dir = "build_$ENV"  # putting the env name in the builddir makes it easy to experiment
 rm -rf $build_dir
 mkdir $build_dir
