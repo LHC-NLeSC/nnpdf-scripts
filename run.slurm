@@ -6,7 +6,6 @@
 #SBATCH --time 02:00:00
 #SBATCH --output=logs/output_%A_%a.out
 
-
 RUNCARD=$1
 ENV=$2
 GITDIR=$3
@@ -24,7 +23,3 @@ anaconda
 conda activate "$ENV"
 
 n3fit "${RUNCARD}.yml" $SLURM_ARRAY_TASK_ID
-
-if [ "$EVOLVE" = true ]; then
-    evolven3fit $RUNCARD $SLURM_ARRAY_TASK_ID
-fi
