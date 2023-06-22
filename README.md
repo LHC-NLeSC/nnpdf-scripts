@@ -7,7 +7,7 @@ To set up nnpdf on Snellius (only for CPU so far):
 3. Run `setup.sh nnpdf-dev ./nnpdf` 
     (first argument is the conda environment name, second the directory of the repository)
 
-### Running a regression test
+### Setting up 2 copies for regression testing
 One workflow to do the regression tests necessary before a PR can be merged is as follows.
 1. Make 2 local copies of the repo, e.g.
 ```bash
@@ -21,7 +21,12 @@ git clone nnpdf nnpdf_mybranch
 ./create_env_from_repo.sh nnpdf_mybranch
 ```
 
-This only has to be done once (if you want to compare different branches, just check them out, no need to remake the directories or environments).
+If the environment or runcard is new, make sure to first run one replica separately.
+Otherwise when running multiple in parallel, they will all see that some files are missing
+and try to download it, and you may get errors.
+
+This setup only has to be done once (if you want to compare different branches,
+just check them out, no need to remake the directories or environments).
 If you make any changes, do it in the main clone `nnpdf` and pull them in the relevant copy.
 
 Now to run a job specified on a particular `runcard`, using both branches,
@@ -29,8 +34,26 @@ Now to run a job specified on a particular `runcard`, using both branches,
 ./submit_from_branch.sh master runcard 100
 ./submit_from_branch.sh mybranch runcard 100
 ```
-If the environment or runcard is new, make sure to first run one replica separatelyx
-Otherwise when running multiple in parallel, they will all see that some files are missing
-and try to download it, and you may get errors.
 
-After this it's still necessary to do a postfit.
+### Running a regression test
+Once set up, to run a regression test:
+
+```bash
+./regression_test.sh runcard master mybranch Nreplicas 1
+```
+will submit two jobs, one with each branch.
+
+Once done,
+```bash
+./regression_test.sh runcard master mybranch Nreplicas 2
+```
+will submit a job to further process the fits and do a comparison.
+
+Finally,
+```bash
+./regression_test.sh runcard master mybranch Nreplicas 3
+```
+will upload the report (directly, not in a job).
+
+The output of the last step includes a link to the report, and in the second step a 
+`timings.txt` is created that has the timings.
