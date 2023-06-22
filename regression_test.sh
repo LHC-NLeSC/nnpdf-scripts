@@ -41,5 +41,12 @@ postfit 1 $RUNCARD2 --at-least-nrep
 vp-setupfit "${RUNCARD1}.yml"
 vp-setupfit "${RUNCARD2}.yml"
 
+# upload the 2 fits (if it doesn't work because it's not indexed, do cp to conda environment and vp-get instead)
+echo "Trying to upload fit..."
+vp-upload $RUNCARD1
+echo "... uploaded ${RUNCARD1}..."
+vp-upload $RUNCARD2
+echo "... uploaded ${RUNCARD2}..."
+
 echo "Comparing fits and uploading..."
 vp-comparefits $RUNCARD1 $RUNCARD2 --upload
