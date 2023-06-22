@@ -14,16 +14,14 @@
 # 1. branch name
 # 2. runcard name (without extension)
 # 3. the number of replicas to run
-# 4. whether to evolve or not (defaulting to true)
 
 
-[[ $# -lt 3 ]] && { echo "Usage: $0 branch runcard replicas evolve (bool, optional)"; exit 1; }
+[[ $# -lt 3 ]] && { echo "Usage: $0 branch runcard replicas"; exit 1; }
 
 BRANCH=$1
 RUNCARD_ORIGINAL=$2
 RUNCARD="${RUNCARD_ORIGINAL}_${BRANCH}"
 REPLICAS=$3
-EVOLVE=${4-true}
 
 cp "${RUNCARD_ORIGINAL}.yml" "${RUNCARD}.yml"
 
@@ -31,4 +29,4 @@ ENV="nnpdf-${BRANCH}"
 GITDIR="nnpdf_${BRANCH}"
 
 jobname="${RUNCARD}-$(date +%Y%m%d-%H%M%S)"
-sbatch --job-name=$jobname --array=1-$REPLICAS run.slurm $RUNCARD $ENV $GITDIR $EVOLVE
+sbatch --job-name=$jobname --array=1-$REPLICAS run.slurm $RUNCARD $ENV $GITDIR
