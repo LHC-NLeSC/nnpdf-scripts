@@ -18,6 +18,13 @@ REPLICAS=$4
 RUNCARD1="${RUNCARD}_${BRANCH1}" 
 RUNCARD2="${RUNCARD}_${BRANCH2}" 
 
+echo "Extracting timings from replica folders..."
+echo $RUNCARD1
+echo $RUNCARD2
+echo $REPLICAS
+python get_times.py $RUNCARD1 $REPLICAS >> timings.txt
+python get_times.py $RUNCARD2 $REPLICAS >> timings.txt
+
 echo "Evolving all replicas from runcard ${RUNCARD1}..."
 evolven3fit $RUNCARD1 $REPLICAS
 echo "Evolving all replicas from runcard ${RUNCARD2}..."
