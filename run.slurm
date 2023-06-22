@@ -4,12 +4,10 @@
 #SBATCH --cpus-per-task=32
 #SBATCH --partition thin
 #SBATCH --time 02:00:00
-#SBATCH --output=logs/output_%A_%a.out
 
 RUNCARD=$1
 ENV=$2
 GITDIR=$3
-EVOLVE=$4
 
 # Some info on the job...
 pwd; hostname; date

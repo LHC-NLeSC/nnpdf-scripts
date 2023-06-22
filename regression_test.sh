@@ -1,59 +1,81 @@
-#!/bin/bash
-#
-# Do the postfit selection and upload the results
-#
-# ********** UNTESTED **********
-#
-# Args
-# 1. runcard
-# 2, 3. branches
-# 4. number of replicas
+# This script contains all of the steps to perform a regression test
+# Steps:
+# 1. Submit fitting jobs with both branches
+# 2. Run vp-comparefits on the fit results
+# 3. Upload the fit
+
+# CHANGE THESE MANUALLY
+AUTHOR="Aron Jansen"
+INITIALS="aj"
 
 
-RUNCARD=$1
+[[ $# -lt 5 ]] && { echo "Usage: $0 runcard branch1 branch2 replicas step"; exit 1; }
+
+
+RUNCARD_ORIGINAL=$1
 BRANCH1=$2
 BRANCH2=$3
 REPLICAS=$4
+STEP=$5
 
-RUNCARD1="${RUNCARD}_${BRANCH1}" 
-RUNCARD2="${RUNCARD}_${BRANCH2}" 
+RUNCARD1="${RUNCARD_ORIGINAL}_${BRANCH1}"
+RUNCARD2="${RUNCARD_ORIGINAL}_${BRANCH2}"
 
-echo "Extracting timings from replica folders..."
-echo $RUNCARD1
-echo $RUNCARD2
-echo $REPLICAS
-python get_times.py $RUNCARD1 $REPLICAS >> timings.txt
-python get_times.py $RUNCARD2 $REPLICAS >> timings.txt
+ENV1="nnpdf-${BRANCH1}"
+ENV2="nnpdf-${BRANCH2}"
 
-echo "Running postfit for runcard ${RUNCARD1}..."
-# Note: the replicas we give here are by default the number that pass the checks we're about to do
-# Below we ask for at least one.
-postfit 1 $RUNCARD1 --at-least-nrep
-echo "Running postfit for runcard ${RUNCARD2}..."
-postfit 1 $RUNCARD2 --at-least-nrep
+function runfits {
+    run_on_branch $RUNCARD1 $ENV1 $BRANCH1
+    run_on_branch $RUNCARD2 $ENV2 $BRANCH2
+}
 
-echo "Evolving all replicas from runcard ${RUNCARD1}..."
-evolven3fit $RUNCARD1 $REPLICAS
-echo "Evolving all replicas from runcard ${RUNCARD2}..."
-evolven3fit $RUNCARD2 $REPLICAS
+function comparefits {
+    activate_env
+    echo "renaming fits to match conventions"
+    today=$(date +'%y%m%d')
 
-# if you haven't run vp-setupfit before the fit, do it at this point
+    KEYWORDS1="regression-${BRANCH1}"
+    KEYWORDS2="regression-${BRANCH2}"
 
-# upload the 2 fits, it may fail indexing, keep trying until it works
-# see https://github.com/NNPDF/nnpdf/issues/1079
-echo "Trying to upload fit..."
-while [[ $? -eq 0 ]]
-do
-    vp-upload ${RUNCARD1}
-    sleep 20s ; # don't want to chain uploads...
-done
-echo "... uploaded ${RUNCARD1}..."
-while [[ $? -eq 0 ]]
-do
-    vp-upload ${RUNCARD2}
-    sleep 20s ; # don't want to chain uploads...
-done
-echo "... uploaded ${RUNCARD2}..."
+    FITNAME1="${today}-${INITIALS}-${KEYWORDS1}-001"
+    FITNAME2="${today}-${INITIALS}-${KEYWORDS2}-001"
 
-echo "Comparing fits and uploading..."
-vp-comparefits $RUNCARD1 $RUNCARD2 --upload
+    vp-fitrename $RUNCARD1 $FITNAME1
+    vp-fitrename $RUNCARD2 $FITNAME2
+
+    jobname="compare_${BRANCH1}_${BRANCH2}_${today}"
+    sbatch --jobname=$jobname comparefits.slurm $FITNAME1 $FITNAME2 $REPLICAS $ENV1 "$AUTHOR"
+}
+
+function upload {
+    activate_env
+    vp-upload output
+}
+
+function activate_env {
+    source ~/.bashrc
+    anaconda
+    conda activate "$ENV1"
+}
+
+function run_on_branch {
+    RUNCARD=$1
+    ENV=$2
+    BRANCH=$3
+
+    cp "${RUNCARD_ORIGINAL}.yml" "${RUNCARD}.yml"
+    jobname="${RUNCARD}-$(date +%Y%m%d-%H%M%S)"
+    runcard=$RUNCARD
+    env=$ENV
+    gitdir="nnpdf_${BRANCH}"
+    outdir="logs/${RUNCARD_ORIGINAL}/${BRANCH}"
+    mkdir -p "${outdir}"
+    sbatch --job-name=$jobname --array=1-$REPLICAS --output="${outdir}/output_%A_%a.out" run.slurm $runcard $env $gitdir
+}
+
+case $STEP in
+  1) runfits ;;
+  2) comparefits ;;
+  3) upload ;;
+  *) echo "Invalid step number. Please provide a step number (1, 2, or 3)." ;;
+esac
