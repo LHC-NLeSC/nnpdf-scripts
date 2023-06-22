@@ -39,17 +39,17 @@ echo "Extracting timings from replica folders..."
 python get_times.py $RUNCARD1 $REPLICAS >> timings.txt
 python get_times.py $RUNCARD2 $REPLICAS >> timings.txt
 
+echo "Evolving all replicas from runcard ${REFERENCE_FIT}..."
+evolven3fit $REFERENCE_FIT $REPLICAS
+echo "Evolving all replicas from runcard ${CURRENT_FIT}..."
+evolven3fit $CURRENT_FIT $REPLICAS
+
 echo "Running postfit for runcard ${REFERENCE_FIT}..."
 # Note: the replicas we give here are by default the number that pass the checks we're about to do
 # Below we ask for at least one.
 postfit 1 $REFERENCE_FIT --at-least-nrep
 echo "Running postfit for runcard ${CURRENT_FIT}..."
 postfit 1 $CURRENT_FIT --at-least-nrep
-
-echo "Evolving all replicas from runcard ${REFERENCE_FIT}..."
-evolven3fit $REFERENCE_FIT $REPLICAS
-echo "Evolving all replicas from runcard ${CURRENT_FIT}..."
-evolven3fit $CURRENT_FIT $REPLICAS
 
 # NOTE: if you haven't run vp-setupfit before the fit, do it at this point
 
