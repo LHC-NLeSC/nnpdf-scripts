@@ -22,4 +22,5 @@ source ~/.bashrc
 anaconda
 conda activate "$ENV"
 
+vp-setupfit "${RUNCARD}.yml"
 n3fit "${RUNCARD}.yml" $SLURM_ARRAY_TASK_ID

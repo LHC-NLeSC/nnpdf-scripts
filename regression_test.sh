@@ -37,9 +37,7 @@ evolven3fit $RUNCARD1 $REPLICAS
 echo "Evolving all replicas from runcard ${RUNCARD2}..."
 evolven3fit $RUNCARD2 $REPLICAS
 
-# setupfit, it's ok to run this after
-vp-setupfit "${RUNCARD1}.yml"
-vp-setupfit "${RUNCARD2}.yml"
+# if you haven't run vp-setupfit before the fit, do it at this point
 
 # upload the 2 fits, it may fail indexing, keep trying until it works
 # see https://github.com/NNPDF/nnpdf/issues/1079
