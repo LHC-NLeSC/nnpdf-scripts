@@ -41,11 +41,20 @@ evolven3fit $RUNCARD2 $REPLICAS
 vp-setupfit "${RUNCARD1}.yml"
 vp-setupfit "${RUNCARD2}.yml"
 
-# upload the 2 fits (if it doesn't work because it's not indexed, do cp to conda environment and vp-get instead)
+# upload the 2 fits, it may fail indexing, keep trying until it works
+# see https://github.com/NNPDF/nnpdf/issues/1079
 echo "Trying to upload fit..."
-vp-upload $RUNCARD1
+while [[ $? -eq 0 ]]
+do
+    vp-upload ${RUNCARD1}
+    sleep 20s ; # don't want to chain uploads...
+done
 echo "... uploaded ${RUNCARD1}..."
-vp-upload $RUNCARD2
+while [[ $? -eq 0 ]]
+do
+    vp-upload ${RUNCARD2}
+    sleep 20s ; # don't want to chain uploads...
+done
 echo "... uploaded ${RUNCARD2}..."
 
 echo "Comparing fits and uploading..."
