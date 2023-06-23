@@ -44,7 +44,7 @@ function comparefits {
     vp-fitrename $RUNCARD2 $FITNAME2
 
     jobname="compare_${BRANCH1}_${BRANCH2}_${today}"
-    sbatch --jobname=$jobname comparefits.slurm $FITNAME1 $FITNAME2 $REPLICAS $ENV1 "$AUTHOR"
+    sbatch --job-name=$jobname comparefits.slurm $FITNAME1 $FITNAME2 $REPLICAS $ENV1 "$AUTHOR"
 }
 
 function upload {
