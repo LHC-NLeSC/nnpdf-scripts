@@ -10,18 +10,29 @@
 # ********** UNTESTED **********
 #
 # Args
-# 1. runcard1
-# 2. runcard2
-# 3. number of replicas
-# 4. environment name
-# 5. author name
+# 1, 2. runcard1, runcard2
+# 3, 4. fitname1, fitname2
+# 5. number of replicas
+# 6. environment name
+# 7. author name
+
+RUNCARD1=$1
+RUNCARD2=$2
+FITNAME1=$3
+FITNAME2=$4
+REPLICAS=$5
+ENV=$6
+AUTHOR=$7
+
+echo "RUNCARD1: ${RUNCARD1}"
+echo "RUNCARD2: ${RUNCARD2}"
+echo "FITNAME1: ${FITNAME1}"
+echo "FITNAME2: ${FITNAME2}"
+echo "REPLICAS: ${REPLICAS}"
+echo "ENV: ${ENV}"
+echo "AUTHOR: ${AUTHOR}"
 
 
-REFERENCE_FIT=$1
-CURRENT_FIT=$2
-REPLICAS=$3
-ENV=$4
-AUTHOR=$5
 
 TITLE="Regression test"
 KEYWORD="report"
@@ -36,13 +47,19 @@ anaconda
 conda activate "$ENV"
 
 echo "Extracting timings from replica folders..."
-python get_times.py $RUNCARD1 $REPLICAS >> timings.txt
-python get_times.py $RUNCARD2 $REPLICAS >> timings.txt
+python get_times.py "${RUNCARD1}" "${REPLICAS}" >> "timings_${RUNCARD1}.txt"
+python get_times.py "${RUNCARD2}" "${REPLICAS}" >> "timings_${RUNCARD2}.txt"
 
 echo "Evolving all replicas from runcard ${REFERENCE_FIT}..."
 evolven3fit $REFERENCE_FIT $REPLICAS
 echo "Evolving all replicas from runcard ${CURRENT_FIT}..."
 evolven3fit $CURRENT_FIT $REPLICAS
+
+echo "renaming fits to match conventions"
+vp-fitrename "${RUNCARD1}" "${FITNAME1}"
+vp-fitrename "${RUNCARD2}" "${FITNAME2}"
+REFERNCE_FIT=$FITNAME1
+CURRENT_FIT=$FITNAME2
 
 echo "Running postfit for runcard ${REFERENCE_FIT}..."
 # Note: the replicas we give here are by default the number that pass the checks we're about to do

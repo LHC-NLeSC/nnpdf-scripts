@@ -30,8 +30,6 @@ function runfits {
 }
 
 function comparefits {
-    activate_env
-    echo "renaming fits to match conventions"
     today=$(date +'%y%m%d')
 
     KEYWORDS1="regression-${BRANCH1}"
@@ -40,11 +38,8 @@ function comparefits {
     FITNAME1="${today}-${INITIALS}-${KEYWORDS1}-001"
     FITNAME2="${today}-${INITIALS}-${KEYWORDS2}-001"
 
-    vp-fitrename $RUNCARD1 $FITNAME1
-    vp-fitrename $RUNCARD2 $FITNAME2
-
     jobname="compare_${BRANCH1}_${BRANCH2}_${today}"
-    sbatch --job-name=$jobname comparefits.slurm $FITNAME1 $FITNAME2 $REPLICAS $ENV1 "$AUTHOR"
+    sbatch --job-name=$jobname comparefits.slurm $RUNCARD1 $RUNCARD2 $FITNAME1 $FITNAME2 $REPLICAS $ENV1 "$AUTHOR"
 }
 
 function upload {
