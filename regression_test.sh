@@ -39,7 +39,8 @@ function comparefits {
     FITNAME2="${today}-${INITIALS}-${KEYWORDS2}-001"
 
     jobname="compare_${BRANCH1}_${BRANCH2}_${today}"
-    sbatch --job-name=$jobname comparefits.slurm $RUNCARD1 $RUNCARD2 $FITNAME1 $FITNAME2 $REPLICAS $ENV1 "$AUTHOR"
+    OUTPUT_FOLDER=$jobname
+    sbatch --job-name=$jobname comparefits.slurm $RUNCARD1 $RUNCARD2 $FITNAME1 $FITNAME2 $REPLICAS $ENV1 "$AUTHOR" $OUTPUT_FOLDER
 }
 
 function upload {

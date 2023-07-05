@@ -3,7 +3,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=32
 #SBATCH --partition thin
-#SBATCH --time 04:00:00
+#SBATCH --time 03:00:00
 
 # Do the postfit selection and compare the results
 #
@@ -23,6 +23,7 @@ FITNAME2=$4
 REPLICAS=$5
 ENV=$6
 AUTHOR=$7
+OUTPUT_FOLDER=$8
 
 echo "RUNCARD1: ${RUNCARD1}"
 echo "RUNCARD2: ${RUNCARD2}"
@@ -33,6 +34,8 @@ echo "ENV: ${ENV}"
 echo "AUTHOR: ${AUTHOR}"
 
 
+REFERENCE_FIT=$FITNAME1
+CURRENT_FIT=$FITNAME2
 
 TITLE="Regression test"
 KEYWORD="report"
@@ -53,11 +56,10 @@ evolven3fit $RUNCARD1 $REPLICAS
 echo "Evolving all replicas from runcard ${RUNCARD2}..."
 evolven3fit $RUNCARD2 $REPLICAS
 
-echo "renaming fits to match conventions"
+echo "renaming fits to match conventions, $RUNCARD1 to $FITNAME1"
 vp-fitrename "${RUNCARD1}" "${FITNAME1}"
+echo "renaming fits to match conventions, $RUNCARD2 to $FITNAME2"
 vp-fitrename "${RUNCARD2}" "${FITNAME2}"
-REFERENCE_FIT=$FITNAME1
-CURRENT_FIT=$FITNAME2
 
 echo "Running postfit for runcard ${REFERENCE_FIT}..."
 # Note: the replicas we give here are by default the number that pass the checks we're about to do
@@ -70,20 +72,23 @@ postfit 1 $CURRENT_FIT --at-least-nrep
 
 # upload the 2 fits, it may fail indexing, keep trying until it works
 # see https://github.com/NNPDF/nnpdf/issues/1079
-echo "Trying to upload fit ${REFERENCE_FIT}..."
-while [[ $? -eq 0 ]]
-do
-    vp-upload ${REFERENCE_FIT} --force
-    sleep 20s ; # don't want to chain uploads...
-done
-echo "... uploaded ${REFERENCE_FIT}..."
-echo "Trying to upload fit ${CURRENT_FIT}..."
-while [[ $? -eq 0 ]]
-do
-    vp-upload ${CURRENT_FIT} --force
-    sleep 20s ; # don't want to chain uploads...
-done
-echo "... uploaded ${CURRENT_FIT}..."
+upload_until_successful() {
+    local FIT=$1
+    echo "Trying to upload fit ${FIT}..."
+    vp-upload ${FIT} --force
+    local upload_exit_status=$?
+    while [[ $upload_exit_status -ne 0 ]]
+    do
+        echo "Something went wrong, trying again..."
+        sleep 20s ; # don't want to chain uploads...
+        vp-upload ${FIT} --force
+        upload_exit_status=$?
+    done
+    echo "... uploaded ${FIT}..."
+}
+
+upload_until_successful ${REFERENCE_FIT}
+upload_until_successful ${CURRENT_FIT}
 
 echo "Comparing fits"
-vp-comparefits --title "$TITLE" --author "$AUTHOR" --keywords "$KEYWORD" --current_fit_label "$CURRENT_FIT_LABEL" --reference_fit_label "$REFERENCE_FIT_LABEL" $REFERENCE_FIT $CURRENT_FIT
+vp-comparefits --output "$OUTPUT_FOLDER" --title "$TITLE" --author "$AUTHOR" --keywords "$KEYWORD" --current_fit_label "$CURRENT_FIT_LABEL" --reference_fit_label "$REFERENCE_FIT_LABEL" $REFERENCE_FIT $CURRENT_FIT
