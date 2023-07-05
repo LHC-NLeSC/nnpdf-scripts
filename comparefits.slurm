@@ -59,10 +59,10 @@ vp-fitrename "${RUNCARD2}" "${FITNAME2}"
 REFERENCE_FIT=$FITNAME1
 CURRENT_FIT=$FITNAME2
 
-echo "Running postfit for runcard ${REFERNCE_FIT}..."
+echo "Running postfit for runcard ${REFERENCE_FIT}..."
 # Note: the replicas we give here are by default the number that pass the checks we're about to do
 # Below we ask for at least one.
-postfit 1 $REFERNCE_FIT --at-least-nrep
+postfit 1 $REFERENCE_FIT --at-least-nrep
 echo "Running postfit for runcard ${CURRENT_FIT}..."
 postfit 1 $CURRENT_FIT --at-least-nrep
 
@@ -70,13 +70,13 @@ postfit 1 $CURRENT_FIT --at-least-nrep
 
 # upload the 2 fits, it may fail indexing, keep trying until it works
 # see https://github.com/NNPDF/nnpdf/issues/1079
-echo "Trying to upload fit ${REFERNCE_FIT}..."
+echo "Trying to upload fit ${REFERENCE_FIT}..."
 while [[ $? -eq 0 ]]
 do
-    vp-upload ${REFERNCE_FIT} --force
+    vp-upload ${REFERENCE_FIT} --force
     sleep 20s ; # don't want to chain uploads...
 done
-echo "... uploaded ${REFERNCE_FIT}..."
+echo "... uploaded ${REFERENCE_FIT}..."
 echo "Trying to upload fit ${CURRENT_FIT}..."
 while [[ $? -eq 0 ]]
 do
@@ -86,4 +86,4 @@ done
 echo "... uploaded ${CURRENT_FIT}..."
 
 echo "Comparing fits"
-vp-comparefits --title "$TITLE" --author "$AUTHOR" --keywords "$KEYWORD" --current_fit_label "$CURRENT_FIT_LABEL" --reference_fit_label "$REFERENCE_FIT_LABEL" $REFERNCE_FIT $CURRENT_FIT
+vp-comparefits --title "$TITLE" --author "$AUTHOR" --keywords "$KEYWORD" --current_fit_label "$CURRENT_FIT_LABEL" --reference_fit_label "$REFERENCE_FIT_LABEL" $REFERENCE_FIT $CURRENT_FIT
