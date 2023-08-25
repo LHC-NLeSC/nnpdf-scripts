@@ -66,6 +66,11 @@ def compute_alltogether(pdf, basis_mask, fk, invcov, mask2):
 def compute_alltogether_masked_fk(pdf, masked_fk, invcov, mask2, **kwargs):
     return tf.einsum('brxf, nfgxy, bryg -> brn', pdf, masked_fk, pdf)
 
+def compute_optimized(pdf, masked_fk, fk, **kwargs):
+    step1 = tf.einsum('nfgxy,brxf->ngybr', masked_fk, pdf)
+    result = tf.einsum('ngybr,bryg->brn', step1, pdf)
+    return result
+
 def define_inputs_replicafirst(seed):
     inputs = define_inputs(seed)
     inputs['pdf'] = tf.transpose(inputs['pdf'], perm=[0, 3, 1, 2])
@@ -118,12 +123,14 @@ def test_equal():
     replicafirst = compute_replicafirst(**define_inputs_replicafirst(42))
     alltogether = compute_alltogether(**define_inputs_alltogether(42))
     altogether_masked_fk = compute_alltogether_masked_fk(**define_inputs_alltogether_masked_fk(42))
+    optimized = compute_optimized(**define_inputs_alltogether_masked_fk(42))
     # this gives really 0
     print(f"difference between original and replicafirst: {tf.reduce_sum(original - replicafirst)} (relative: {tf.reduce_sum(original - replicafirst)/tf.reduce_sum(original)})")
     # this gives 10^-15 for relative
     print(f"difference between original and alltogether: {tf.reduce_sum(original - alltogether)} (relative: {tf.reduce_sum(original - alltogether)/tf.reduce_sum(original)})")
     # this gives 10^-15 for relative
     print(f"difference between original and altogether_masked_fk: {tf.reduce_sum(original - altogether_masked_fk)} (relative: {tf.reduce_sum(original - altogether_masked_fk)/tf.reduce_sum(original)})")
+    print(f"difference between original and optimized: {tf.reduce_sum(original - optimized)} (relative: {tf.reduce_sum(original - optimized)/tf.reduce_sum(original)})")
 
 test_equal()
 
@@ -132,3 +139,4 @@ timeit(NREPS, define_inputs, compute)
 timeit(NREPS, define_inputs_alltogether_masked_fk, compute_alltogether_masked_fk)
 timeit(NREPS, define_inputs_replicafirst, compute_replicafirst)
 timeit(NREPS, define_inputs_alltogether, compute_alltogether)
+timeit(NREPS, define_inputs_alltogether_masked_fk, compute_optimized)
