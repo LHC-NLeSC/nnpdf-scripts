@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 from n3fit.backends import operations as op
+import time
 
 
 REPLICAS = 100
@@ -65,9 +66,9 @@ def compute(pdf, basis_mask, fk, invcov, mask2):
 
 def compute_replicafirst(pdf, basis_mask, fk, invcov, mask2):
     pdf = tf.squeeze(pdf, axis=0)
-    luminosity = tf.einsum('ari,brj->rjiba', pdf, pdf)
+    luminosity = tf.einsum('rai,rbj->rjiba', pdf, pdf)
     pdf_x_pdf = tf.boolean_mask(luminosity, basis_mask, axis=1)
-    res = tf.einsum('nfij, rfij -> rn', fk, pdf_x_pdf)
+    ret = tf.einsum('nfij, rfij -> rn', fk, pdf_x_pdf)
     DY_out = op.batchit(ret)  # (BATCH, REPLICAS, NDATA)
     DY_out_masked = op.tensor_product(DY_out, mask2, axes=1)  # (BATCH, REPLICAS, NDATA_TRAIN)
     y = DY_out_masked
@@ -78,7 +79,16 @@ def compute_replicafirst(pdf, basis_mask, fk, invcov, mask2):
 def define_inputs_replicafirst(seed):
     inputs = define_inputs(seed)
     inputs['pdf'] = tf.transpose(inputs['pdf'], perm=[0, 3, 1, 2])
+    return inputs
 
-losses = compute(**define_inputs(42))
-losses_replicafirst = compute_replicafirst(**define_inputs_replicafirst(42))
-print(tf.reduce_sum(losses - losses_replicafirst))
+def timeit(nreps, create_inputs, function):
+    inputs = create_inputs(42)
+    start = time.time()
+    for _ in range(nreps):
+        function(**inputs)
+    end = time.time()
+    print(f"{function.__name__} took {end-start} seconds, {(end-start)/nreps} per call")
+
+NREPS = 1_000
+timeit(NREPS, define_inputs, compute)
+timeit(NREPS, define_inputs_replicafirst, compute_replicafirst)
