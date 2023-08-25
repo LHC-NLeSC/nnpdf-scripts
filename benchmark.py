@@ -82,6 +82,14 @@ def compute_alltogether(pdf, basis_mask, fk, invcov, mask2):
     losses = op.einsum("bri, rij, brj -> r", y, invcov, y)  # (REPLICAS,)
     return losses
 
+def compute_alltogether_masked_fk(pdf, masked_fk, invcov, mask2, **kwargs):
+    DY_out = tf.einsum('brxf, nfgxy, bryg -> brn', pdf, masked_fk, pdf)
+    DY_out_masked = op.tensor_product(DY_out, mask2, axes=1)  # (BATCH, REPLICAS, NDATA_TRAIN)
+    y = DY_out_masked
+    losses = op.einsum("bri, rij, brj -> r", y, invcov, y)  # (REPLICAS,)
+    return losses
+
+
 
 def define_inputs_replicafirst(seed):
     inputs = define_inputs(seed)
@@ -91,6 +99,12 @@ def define_inputs_replicafirst(seed):
 def define_inputs_alltogether(seed):
     inputs = define_inputs_replicafirst(seed)
     inputs['basis_mask'] = tensor_from_mask(inputs['basis_mask'])
+    return inputs
+
+def define_inputs_alltogether_masked_fk(seed):
+    inputs = define_inputs_alltogether(seed)
+    masked_fk = op.einsum('fgF, nFxy -> nfgxy', inputs['basis_mask'], inputs['fk'])
+    inputs['masked_fk'] = masked_fk
     return inputs
 
 def tensor_from_mask(mask):
@@ -137,5 +151,6 @@ def test_equal():
 
 NREPS = 10
 timeit(NREPS, define_inputs, compute)
+timeit(NREPS, define_inputs_alltogether_masked_fk, compute_alltogether_masked_fk)
 timeit(NREPS, define_inputs_replicafirst, compute_replicafirst)
 timeit(NREPS, define_inputs_alltogether, compute_alltogether)
