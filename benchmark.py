@@ -50,19 +50,7 @@ def compute(pdf, basis_mask, fk, invcov, mask2):
     res = op.tensor_product(fk, pdf_x_pdf, axes=3)  # (NDATA, REPLICAS)
     ret = op.transpose(res)  # (REPLICAS, NDATA)
     DY_out = op.batchit(ret)  # (BATCH, REPLICAS, NDATA)
-
-    # masking
-    DY_out_masked = op.tensor_product(DY_out, mask2, axes=1)  # (BATCH, REPLICAS, NDATA_TRAIN)
-
-
-    # loss
-    # skipping the not so relevant lines:
-    # tmp_raw = self._y_true - y_pred
-    # tmp = op.op_multiply([tmp_raw, self.mask])
-    y = DY_out_masked
-    losses = op.einsum("bri, rij, brj -> r", y, invcov, y)  # (REPLICAS,)
-
-    return losses
+    return DY_out
 
 def compute_replicafirst(pdf, basis_mask, fk, invcov, mask2):
     pdf = tf.squeeze(pdf, axis=0)
@@ -70,26 +58,13 @@ def compute_replicafirst(pdf, basis_mask, fk, invcov, mask2):
     pdf_x_pdf = tf.boolean_mask(luminosity, basis_mask, axis=1)
     ret = tf.einsum('nfij, rfij -> rn', fk, pdf_x_pdf)
     DY_out = op.batchit(ret)  # (BATCH, REPLICAS, NDATA)
-    DY_out_masked = op.tensor_product(DY_out, mask2, axes=1)  # (BATCH, REPLICAS, NDATA_TRAIN)
-    y = DY_out_masked
-    losses = op.einsum("bri, rij, brj -> r", y, invcov, y)  # (REPLICAS,)
-    return losses
+    return DY_out
 
 def compute_alltogether(pdf, basis_mask, fk, invcov, mask2):
-    DY_out = tf.einsum('brxf, fgF, nFxy, bryg -> brn', pdf, basis_mask, fk, pdf)
-    DY_out_masked = op.tensor_product(DY_out, mask2, axes=1)  # (BATCH, REPLICAS, NDATA_TRAIN)
-    y = DY_out_masked
-    losses = op.einsum("bri, rij, brj -> r", y, invcov, y)  # (REPLICAS,)
-    return losses
+    return tf.einsum('brxf, fgF, nFxy, bryg -> brn', pdf, basis_mask, fk, pdf)
 
 def compute_alltogether_masked_fk(pdf, masked_fk, invcov, mask2, **kwargs):
-    DY_out = tf.einsum('brxf, nfgxy, bryg -> brn', pdf, masked_fk, pdf)
-    DY_out_masked = op.tensor_product(DY_out, mask2, axes=1)  # (BATCH, REPLICAS, NDATA_TRAIN)
-    y = DY_out_masked
-    losses = op.einsum("bri, rij, brj -> r", y, invcov, y)  # (REPLICAS,)
-    return losses
-
-
+    return tf.einsum('brxf, nfgxy, bryg -> brn', pdf, masked_fk, pdf)
 
 def define_inputs_replicafirst(seed):
     inputs = define_inputs(seed)
@@ -142,12 +117,15 @@ def test_equal():
     original = compute(**define_inputs(42))
     replicafirst = compute_replicafirst(**define_inputs_replicafirst(42))
     alltogether = compute_alltogether(**define_inputs_alltogether(42))
+    altogether_masked_fk = compute_alltogether_masked_fk(**define_inputs_alltogether_masked_fk(42))
     # this gives really 0
     print(f"difference between original and replicafirst: {tf.reduce_sum(original - replicafirst)} (relative: {tf.reduce_sum(original - replicafirst)/tf.reduce_sum(original)})")
     # this gives 10^-15 for relative
     print(f"difference between original and alltogether: {tf.reduce_sum(original - alltogether)} (relative: {tf.reduce_sum(original - alltogether)/tf.reduce_sum(original)})")
+    # this gives 10^-15 for relative
+    print(f"difference between original and altogether_masked_fk: {tf.reduce_sum(original - altogether_masked_fk)} (relative: {tf.reduce_sum(original - altogether_masked_fk)/tf.reduce_sum(original)})")
 
-#test_equal()
+test_equal()
 
 NREPS = 10
 timeit(NREPS, define_inputs, compute)
