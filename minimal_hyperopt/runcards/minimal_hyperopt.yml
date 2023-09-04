@@ -102,7 +102,7 @@ theory:
 
 hyperscan_config:
   architecture:
-    #      n_layers: [1,2,3,4]
+      n_layers: [2]
       min_units: 10
       max_units: 45 
 
@@ -206,7 +206,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     clipnorm: 6.073e-6
     learning_rate: 2.621e-3
     optimizer_name: Nadam
-  epochs: 17000
+  epochs: 1000 #17000
   positivity:
     initial: 184.8
     multiplier:
