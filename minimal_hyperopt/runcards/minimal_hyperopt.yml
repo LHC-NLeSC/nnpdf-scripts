@@ -98,7 +98,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 200     # database id
+  theoryid: 400     # database id
 
 hyperscan_config:
   architecture:
