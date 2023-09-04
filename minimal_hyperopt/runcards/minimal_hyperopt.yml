@@ -8,77 +8,84 @@ description: "NNPDF4.0 NNLO reduced set for hyperoptimization"
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- {dataset: NMCPD_dw, frac: 0.75}
+  dataset_inputs:
+- {dataset: NMCPD_dw_ite, frac: 0.75}
 - {dataset: NMC, frac: 0.75}
-- {dataset: SLACP_dwsh, frac: 0.75}
-- {dataset: SLACD_dw, frac: 0.75}
+- {dataset: SLACP_dwsh, frac: 0.75}  # where does this go?
+- {dataset: SLACD_dw_ite, frac: 0.75}  # where does this go?
 - {dataset: BCDMSP_dwsh, frac: 0.75}
-- {dataset: BCDMSD_dw, frac: 0.75}
-- {dataset: CHORUSNUPb_dw, frac: 0.75}
-- {dataset: CHORUSNBPb_dw, frac: 0.75}
-- {dataset: NTVNUDMNFe_dw, frac: 0.75, cfac: [MAS]}
-- {dataset: NTVNBDMNFe_dw, frac: 0.75, cfac: [MAS]}
-- {dataset: HERACOMBNCEM, frac: 0.75}
+- {dataset: BCDMSD_dw_ite, frac: 0.75}  # where does this go?
+- {dataset: CHORUSNUPb_dw_ite, frac: 0.75}
+- {dataset: CHORUSNBPb_dw_ite, frac: 0.75}
+- {dataset: NTVNUDMNFe_dw_ite, frac: 0.75, cfac: [MAS]}
+- {dataset: NTVNBDMNFe_dw_ite, frac: 0.75, cfac: [MAS]}
+- {dataset: HERACOMBNCEM, frac: 0.75}  # where does this go?
 - {dataset: HERACOMBNCEP460, frac: 0.75}
 - {dataset: HERACOMBNCEP575, frac: 0.75}
 - {dataset: HERACOMBNCEP820, frac: 0.75}
 - {dataset: HERACOMBNCEP920, frac: 0.75}
 - {dataset: HERACOMBCCEM, frac: 0.75}
 - {dataset: HERACOMBCCEP, frac: 0.75}
-- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}   # N
-- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   # N
-- {dataset: DYE886R_dw, frac: 0.75}
+- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}
+#- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}
+- {dataset: DYE886R_dw_ite, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
-- {dataset: DYE605_dw, frac: 0.75, cfac: [QCD]}
+- {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
+- {dataset: DYE906R_dw_ite, frac: 0.75, cfac: [ACC, QCD]}  # where does this go?
 - {dataset: CDFZRAP_NEW, frac: 0.75, cfac: [QCD]}
-- {dataset: D0ZRAP, frac: 0.75, cfac: [QCD]}
+- {dataset: D0ZRAP_40, frac: 0.75, cfac: [QCD]}
 - {dataset: D0WMASY, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASWZRAP36PB, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASZHIGHMASS49FB, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASLOMASSDY11EXT, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: [QCD]}               # N
-- {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: [QCD]}               # N
-- {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: [QCDEWK]}             # N
-- {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM, QCD]}       # N
-- {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         # N
-- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         # N
+- {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: [QCDEWK]}  # where does this go?
+- {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: [QCD]}  # where does this go?
+- {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM, QCD]}  # where does this go?
+- {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: [QCD], sys: 10}
 - {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: [QCD], sys: 10}
-- {dataset: ATLASTTBARTOT, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 0.75, cfac: [QCD]}                 # N
-- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM, frac: 0.75, cfac: [QCD]}                # N
-- {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, frac: 0.75, cfac: [QCD]}             # N
-- {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.75, cfac: [QCD]}                        # N
-- {dataset: ATLAS_2JET_7TEV_R06, frac: 0.75, cfac: [QCD]}                            # N
-- {dataset: ATLASPHT15, frac: 0.75, cfac: [QCD, EWK]}                                # N
-- {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 0.75, cfac: [QCD]}                      # N
-- {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}                     # N
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}        # N
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}     # N
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}       # N
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}    # N
+- {dataset: ATLASTTBARTOT7TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASTTBARTOT8TEV, frac: 0.75, cfac: [QCD]}  # where does this go?
+- {dataset: ATLAS_TTBARTOT_13TEV_FULLLUMI, frac: 0.75, cfac: [QCD]}  # where does this go?
+- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 0.75, cfac: [QCD]}  # where does this go?
+- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM, frac: 0.75, cfac: [QCD]}  # where does this go?
+- {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, frac: 0.75, cfac: [QCD]}  # where does this go?
+- {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.75, cfac: [QCD]}  # where does this go?
+- {dataset: ATLAS_2JET_7TEV_R06, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASPHT15_SF, frac: 0.75, cfac: [QCD, EWK]}
+- {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSWEASY840PB, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSWMASY47FB, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSDY2D11, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSWMU8TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSZDIFF12, frac: 0.75, cfac: [QCD, NRM], sys: 10}
-- {dataset: CMS_2JET_7TEV, frac: 0.75, cfac: [QCD]}                                  # N 
-- {dataset: CMS_2JET_3D_8TEV, frac: 0.75, cfac: [QCD]}                               # N
-- {dataset: CMSTTBARTOT, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_2JET_7TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_1JET_8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSTTBARTOT7TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSTTBARTOT8TEV, frac: 0.75, cfac: [QCD]}  # where does this go?
+- {dataset: CMSTTBARTOT13TEV, frac: 0.75, cfac: [QCD]}  # where does this go?
 - {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 0.75, cfac: [QCD]}
-- {dataset: CMSTTBARTOT5TEV, frac: 0.75, cfac: [QCD]}                                 # N
-- {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 0.75, cfac: [QCD]}                 # N
-- {dataset: CMS_TTB_DIFF_13TEV_2016_2L_TRAP, frac: 0.75, cfac: [QCD]}                 # N
-- {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP, frac: 0.75, cfac: [QCD]}                 # N
-- {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, frac: 0.75, cfac: [QCD]}                      # N
-- {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 0.75, cfac: [QCD]}                        # N
-- {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}                       # N
+- {dataset: CMSTTBARTOT5TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_TTB_DIFF_13TEV_2016_2L_TRAP, frac: 0.75, cfac: [QCD]}  # where does this go?
+- {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP, frac: 0.75, cfac: [QCD]}  # where does this go?
+- {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: LHCBZ940PB, frac: 0.75, cfac: [QCD]}
-- {dataset: LHCBZEE2FB, frac: 0.75, cfac: [QCD]}
+- {dataset: LHCBZEE2FB_40, frac: 0.75, cfac: [QCD]}
 - {dataset: LHCBWZMU7TEV, frac: 0.75, cfac: [NRM, QCD]}
 - {dataset: LHCBWZMU8TEV, frac: 0.75, cfac: [NRM, QCD]}
-- {dataset: LHCB_Z_13TEV_DIMUON, frac: 0.75, cfac: [QCD]}                             # N
-- {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 0.75, cfac: [QCD]}                         # N
+- {dataset: LHCB_Z_13TEV_DIMUON, frac: 0.75, cfac: [QCD]}
+- {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 0.75, cfac: [QCD]}
 
 
 ############################################################
@@ -102,7 +109,7 @@ theory:
 
 hyperscan_config:
   architecture:
-      n_layers: [2]
+      n_layers: [3]
       min_units: 10
       max_units: 45 
 
@@ -118,34 +125,35 @@ kfold:
         # DIS
           - HERACOMBCCEM
           - HERACOMBNCEP460
-          - HERACOMB_SIGMARED_B
+            #- HERACOMB_SIGMARED_B
+          - HERACOMB_SIGMARED_C
           - NMC
-          - NTVNBDMNFe_dw
+          - NTVNBDMNFe_dw_ite
         # EWK
-          - LHCBZEE2FB
+          - LHCBZEE2FB_40
           - CMSWEASY840PB
           - ATLASZPT8TEVMDIST
           - D0WMASY
           - DYE886P
         # JETS+TOP
-          - ATLASPHT15
+          - ATLASPHT15_SF
           - ATLAS_2JET_7TEV_R06
           - ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM
-          - CMSTTBARTOT
+          - CMSTTBARTOT7TEV  # is this right or should it be one of the others?
           - CMS_SINGLETOP_TCH_TOT_7TEV
       - datasets:
         # DIS
-          - CHORUSNUPb_dw
+          - CHORUSNUPb_dw_ite
           - HERACOMBNCEP920
           - BCDMSP_dwsh
         # EWK
           - LHCBZ940PB
           - ATLASWZRAP36PB
           - CMSZDIFF12
-          - DYE605_dw
+          - DYE605_dw_ite
           - CMSDY2D11
         # JET+TOP
-          - CMS_2JET_3D_8TEV
+          - CMS_2JET_7TEV  # Have this one twice, one should be CMS_1JET_8TEV but which?
           - ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM
           - ATLAS_SINGLETOP_TCH_R_7TEV
           - CMSTOPDIFF8TEVTTRAPNORM
@@ -154,8 +162,8 @@ kfold:
         # DIS
           - HERACOMBCCEP
           - HERACOMBNCEP575
-          - NMCPD_dw
-          - NTVNUDMNFe_dw
+          - NMCPD_dw_ite
+          - NTVNUDMNFe_dw_ite
         # EWK
           - LHCBWZMU7TEV
           - LHCB_Z_13TEV_DIELECTRON
@@ -163,16 +171,16 @@ kfold:
           - ATLAS_WP_JET_8TEV_PT
           - ATLASZHIGHMASS49FB
           - CMSWMASY47FB
-          - DYE886R_dw
+          - DYE886R_dw_ite
           - CDFZRAP_NEW
         # JET+TOP
-          - ATLASTTBARTOT
+          - ATLASTTBARTOT7TEV
           - ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM
           - CMSTTBARTOT5TEV
           - CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM
       - datasets:
         # DIS
-          - CHORUSNBPb_dw
+          - CHORUSNBPb_dw_ite
           - HERACOMBNCEP820
         # EWK
           - LHCBWZMU8TEV
@@ -182,9 +190,9 @@ kfold:
           - ATLASLOMASSDY11EXT
           - ATLASZPT8TEVYDIST
           - CMSWMU8TEV
-          - D0ZRAP
+          - D0ZRAP_40
         # JET+TOP
-          - CMS_2JET_7TEV
+          - CMS_2JET_7TEV  #Have this one twice, one should be CMS_1JET_8TEV but which?
           - ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM
           - ATLAS_SINGLETOP_TCH_R_13TEV
           - CMS_SINGLETOP_TCH_R_13TEV
