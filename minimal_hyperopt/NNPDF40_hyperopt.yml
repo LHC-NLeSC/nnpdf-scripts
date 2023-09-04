@@ -102,8 +102,8 @@ theory:
 
 hyperscan_config:
   stopping:
-#      min_epochs: 15e3
-#      max_epochs: 45e3
+      min_epochs: 15e3
+      max_epochs: 45e3
       min_patience: 0.1
       max_patience: 0.3
   positivity:
@@ -254,7 +254,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     clipnorm: 2.0e-5
     learning_rate: 2.0e-3
     optimizer_name: Nadam
-  epochs: 1000
+  epochs: 45000
   positivity:
     initial: 338
     multiplier:
