@@ -8,7 +8,6 @@ description: "NNPDF4.0 NNLO reduced set for hyperoptimization"
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-  dataset_inputs:
 - {dataset: NMCPD_dw_ite, frac: 0.75}
 - {dataset: NMC, frac: 0.75}
 - {dataset: SLACP_dwsh, frac: 0.75}  # where does this go?
