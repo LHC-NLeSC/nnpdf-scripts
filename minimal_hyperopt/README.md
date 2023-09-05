@@ -8,6 +8,8 @@ sbatch run_hyperopt.slurm minimal_hyperopt R T -n name
 The script should be run from this directory, and attempts to keep it clean by moving the results to
 a results subdirectory and storing the logs in a logs directory.
 
+It should be run from the hyperopt_loss branch, which is based off of trvl-mask-layers.
+
 Make sure to adjust the time reserved appropriately.
 
 # Timings
