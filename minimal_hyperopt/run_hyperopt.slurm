@@ -7,28 +7,52 @@
 #SBATCH --time 01:00:00
 #SBATCH --output=logs/slurm-%j.out
 
-# Some info on the job...
+
+# Constants, change these manually!
+ENVNAME=nnpdf-master-gpu
+GITDIR=/home/aronjan/experiments/nnpdf_master
+
+# print job info
 pwd; hostname; date
 
-# check arguments
-if [ "$#" -ne 3 ]; then
+# print git info
+echo "\n\nLast commit: "
+git -C ${GITDIR} log -1
+echo "\n\nStatus: "
+git -C ${GITDIR} status -uno
+
+# check if at least 3 arguments were passed
+if [ "$#" -lt 3 ]; then
     echo "Illegal number of parameters"
-    echo "Usage: run_hyperopt.sh <runcard> <replicas> <trials>"
+    echo "Usage: run_hyperopt.sh <runcard> <replicas> <trials> [-n <name>]"
     exit 1
 fi
 
 RUNCARD=$1
 REPLICAS=$2
 TRIALS=$3
+if [ "$#" -eq 5 ]; then
+    NAME=$5
+fi
+
 echo "RUNCARD: $RUNCARD"
 echo "REPLICAS: $REPLICAS"
 echo "TRIALS: $TRIALS"
 
 # activate conda environment
-ENVNAME=nnpdf-master-gpu
 source ~/.bashrc
 anaconda
 conda activate $ENVNAME
+
+# Copy the runcard under the specified name, if given, to avoid different jobs writing to the same directory
+if [ "$#" -eq 5 ]; then
+    mkdir -p runcards/temp
+    cp runcards/$RUNCARD.yml runcards/temp/$NAME.yml
+    RUNCARD=temp/$NAME
+    RENAMED=1
+else
+    RENAMED=0
+fi
 
 # set up cudnn to run on the gpu
 CUDNN_PATH=$(dirname $(python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))
@@ -38,3 +62,16 @@ echo $LD_LIBRARY_PATH
 
 echo "n3fit 'runcards/${RUNCARD}.yml' 1 -r ${REPLICAS} --hyperopt ${TRIALS}"
 n3fit runcards/$RUNCARD.yml 1 -r $REPLICAS --hyperopt $TRIALS
+
+# move the runcard directory to the results directory
+mkdir -p results
+if [ "$RENAMED" -eq 1 ]; then
+    mv $NAME results/$NAME
+else
+    mv $RUNCARD results/$RUNCARD
+fi
+
+# delete the copied runcard
+if [ "$RENAMED" -eq 1 ]; then
+    rm -rf runcards/temp
+fi
