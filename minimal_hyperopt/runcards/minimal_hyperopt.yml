@@ -108,7 +108,7 @@ theory:
 
 hyperscan_config:
   architecture:
-      n_layers: [3]
+      n_layers: [2]
       min_units: 10
       max_units: 45 
 
