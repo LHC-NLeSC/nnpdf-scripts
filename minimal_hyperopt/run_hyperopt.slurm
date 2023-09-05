@@ -21,6 +21,11 @@ git -C ${GITDIR} log -1
 echo "\n\nStatus: "
 git -C ${GITDIR} status -uno
 
+# also print git info of the runcard, assuming this is run from the scripts repo
+echo "\n\nRuncard git info: "
+git log -1
+git status -uno
+
 # check if at least 3 arguments were passed
 if [ "$#" -lt 3 ]; then
     echo "Illegal number of parameters"
