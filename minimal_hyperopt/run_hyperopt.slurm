@@ -78,5 +78,5 @@ fi
 
 # delete the copied runcard
 if [ "$RENAMED" -eq 1 ]; then
-    rm -rf runcards/temp
+    rm runcards/temp/$NAME.yml
 fi
