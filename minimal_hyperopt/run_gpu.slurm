@@ -21,6 +21,9 @@ echo $CUDNN_PATH
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib/:$CUDNN_PATH/lib:$LD_LIBRARY_PATH
 echo $LD_LIBRARY_PATH
 
+# Verify GPU usage:
+python3 -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
+
 RUNCARD=$1
 REPLICAS=$2
 echo "RUNCARD: $RUNCARD"

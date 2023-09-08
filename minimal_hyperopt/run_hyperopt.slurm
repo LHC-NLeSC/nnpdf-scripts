@@ -65,6 +65,9 @@ echo $CUDNN_PATH
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib/:$CUDNN_PATH/lib:$LD_LIBRARY_PATH
 echo $LD_LIBRARY_PATH
 
+# Verify GPU usage:
+python3 -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
+
 echo "n3fit 'runcards/${RUNCARD}.yml' 1 -r ${REPLICAS} --hyperopt ${TRIALS}"
 n3fit runcards/$RUNCARD.yml 1 -r $REPLICAS --hyperopt $TRIALS
 
