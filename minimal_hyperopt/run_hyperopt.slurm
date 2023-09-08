@@ -66,7 +66,14 @@ export LD_LIBRARY_PATH=$CONDA_PREFIX/lib/:$CUDNN_PATH/lib:$LD_LIBRARY_PATH
 echo $LD_LIBRARY_PATH
 
 # Verify GPU usage:
-python3 -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
+ngpus=$(python3 -c "import tensorflow as tf; print(len(tf.config.list_physical_devices('GPU')))")
+
+if [ "${ngpus}" -eq 0 ]; then
+    echo "GPUs not being used!"
+else
+    echo "Using GPUs!"
+    echo "Num GPUs Available: ${ngpus}"
+fi
 
 echo "n3fit 'runcards/${RUNCARD}.yml' 1 -r ${REPLICAS} --hyperopt ${TRIALS}"
 n3fit runcards/$RUNCARD.yml 1 -r $REPLICAS --hyperopt $TRIALS
