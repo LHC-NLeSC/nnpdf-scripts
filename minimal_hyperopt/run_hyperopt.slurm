@@ -4,7 +4,7 @@
 #SBATCH --cpus-per-task=18
 #SBATCH --partition gpu
 #SBATCH --gpus-per-node=1
-#SBATCH --time 01:00:00
+#SBATCH --time 120:00:00
 #SBATCH --output=logs/slurm-%j.out
 
 
