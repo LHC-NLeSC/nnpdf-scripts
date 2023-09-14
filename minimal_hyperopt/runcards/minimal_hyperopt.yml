@@ -152,7 +152,7 @@ kfold:
           - DYE605_dw_ite
           - CMSDY2D11
         # JET+TOP
-          - CMS_2JET_7TEV  # Have this one twice, one should be CMS_1JET_8TEV but which?
+          - CMS_2JET_7TEV
           - ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM
           - ATLAS_SINGLETOP_TCH_R_7TEV
           - CMSTOPDIFF8TEVTTRAPNORM
@@ -191,7 +191,7 @@ kfold:
           - CMSWMU8TEV
           - D0ZRAP_40
         # JET+TOP
-          - CMS_2JET_7TEV  #Have this one twice, one should be CMS_1JET_8TEV but which?
+          - CMS_1JET_8TEV
           - ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM
           - ATLAS_SINGLETOP_TCH_R_13TEV
           - CMS_SINGLETOP_TCH_R_13TEV
