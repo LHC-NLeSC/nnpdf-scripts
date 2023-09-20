@@ -1,0 +1,7 @@
+Results obtained using snellius with just 1 gpu.
+
+1) for the experiment using 10 replicas, we have used the runcard "minimal_hyperopt_200.yml" 
+with command: "sbatch run_hyperopt.slurm minimal_hyperopt_200 10 1000 -name hyperopt_10_rep_1000_trials_8_Sep_2023"
+
+2) for the experiment using 1 replica, the runcard used was "minimal_hyperopt_200_parallel_models_false.yml"
+with command: "sbatch run_hyperopt.slurm minimal_hyperopt_200_parallel_models_false 1 1000 -name hyperopt_1_rep_1000_trials_13_Sep_2023_parallel_models_false"
