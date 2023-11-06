@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=32
+##SBATCH --cpus-per-task=16
 #SBATCH --partition thin
 #SBATCH --time 120:00:00
 #SBATCH --output=logs/slurm-%j.out
@@ -82,8 +82,8 @@ fi
 
 if [ -n "${RESTART}" ]; then
     echo "Restarting job...."
-    echo "n3fit 'runcards/${RUNCARD}.yml' 1 -r ${REPLICAS} --hyperopt ${TRIALS} --restart"
-    n3fit runcards/$RUNCARD.yml 1 -r $REPLICAS --hyperopt $TRIALS --restart
+    echo "n3fit 'runcards/${RUNCARD}.yml' 1 -r ${REPLICAS} --hyperopt ${TRIALS} -o ${NAME} --restart"
+    n3fit runcards/$RUNCARD.yml 1 -r $REPLICAS --hyperopt $TRIALS -o ${NAME} --restart
 else
     echo "n3fit 'runcards/${RUNCARD}.yml' 1 -r ${REPLICAS} --hyperopt ${TRIALS}"
     n3fit runcards/$RUNCARD.yml 1 -r $REPLICAS --hyperopt $TRIALS

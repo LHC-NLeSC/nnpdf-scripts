@@ -4,7 +4,8 @@
 #SBATCH --cpus-per-task=18
 #SBATCH --partition gpu
 #SBATCH --gpus-per-node=1
-#SBATCH --time 120:00:00
+##SBATCH --time 120:00:00
+#SBATCH --time 48:00:00
 #SBATCH --output=logs/slurm-%j.out
 
 
@@ -83,8 +84,8 @@ fi
 
 if [ -n "${RESTART}" ]; then
     echo "Restarting job...."
-    echo "n3fit 'runcards/${RUNCARD}.yml' 1 -r ${REPLICAS} --hyperopt ${TRIALS} --restart"
-    n3fit runcards/$RUNCARD.yml 1 -r $REPLICAS --hyperopt $TRIALS --restart
+    echo "n3fit 'runcards/${RUNCARD}.yml' 1 -r ${REPLICAS} --hyperopt ${TRIALS} -o ${NAME} --restart"
+    n3fit runcards/$RUNCARD.yml 1 -r $REPLICAS --hyperopt $TRIALS -o ${NAME} --restart
 else
     echo "n3fit 'runcards/${RUNCARD}.yml' 1 -r ${REPLICAS} --hyperopt ${TRIALS}"
     n3fit runcards/$RUNCARD.yml 1 -r $REPLICAS --hyperopt $TRIALS
