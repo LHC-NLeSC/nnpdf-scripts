@@ -1,0 +1,7 @@
+anaconda
+conda create -n nnpdf-311 python=3.11
+conda activate nnpdf-311
+conda install lhapdf
+pip install -e .
+pip install tensorflow[and-cuda]
+conda install mongodb --channel=conda-forge
