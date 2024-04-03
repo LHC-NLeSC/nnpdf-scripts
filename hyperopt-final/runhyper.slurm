@@ -10,10 +10,8 @@ REPLICAS=100
 WORKERS=4
 TRIALS=2000
 
-# Load conda
-source ~/.bashrc
-anaconda
-conda activate nnpdf-311
+module load 2022 TensorFlow/2.11.0-foss-2022a-CUDA-11.7.0 
+source ~/nnpdf-env/bin/activate
 
 # Verify GPU usage:
 ngpus=$(python3 -c "import tensorflow as tf; print(len(tf.config.list_physical_devices('GPU')))")
